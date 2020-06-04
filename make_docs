@@ -1,5 +1,5 @@
 #!/bin/bash
 cd docs
 make clean
-sphinx-apidoc -f --ext-autodoc -o . ../dmit/
+sphinx-apidoc -f --ext-autodoc --separate -o . ../dmit/
 make html

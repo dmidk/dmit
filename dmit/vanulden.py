@@ -5,6 +5,8 @@ A. A. M. Holtslag and A. P. Van Ulden, "A Simple Scheme for Daytime
 Estimates of the Surface Fluxes from Routine Weather Data", Journal of climate
 and applied meteorology, 1983, Vol. 22, No. 4.
 
+This code was used in Hintz, et. al. (2020).
+
 """
 import numpy as np
 import datetime as dt
@@ -17,39 +19,59 @@ __email__ = "kah@dmi.dk"
 
 
 def rad_to_deg(rad):
-    """
-    Convert radians to degrees
-    :param rad: radians
-    :type rad: float, list
-    :return: degrees
-    :rtype: float or numpy array
+    """Convert radians to degrees.
+
+    Parameters
+    ----------
+    rad : float, list
+        Radians
+
+    Returns
+    -------
+    deg : float, numpy.array
+        Degrees
     """
     deg = rad * 180. / np.pi
     return deg
 
 
 def deg_to_rad(deg):
-    """Constructor method
+    """Convert degrees to radians.
+
+    Parameters
+    ----------
+    deg : float, list
+        Degrees
+
+    Returns
+    -------
+    rad : float, numpy.array
+        radians
     """
     rad = deg * np.pi / 180.
     return rad
 
 
 def solar_elevation(M, D, H, lon, lat):
-    """
-    Inputs
-    M      ::  Month of year (1-12)
-    D      ::  Day of month (1-31)
-    H      ::  Hour of day in UTC
-    lon    ::  Longitude in degrees
+    """ Compute the solar elevation
 
     Parameters
-    SL     ::  Solar longitude
-    delta  ::  Solar declination
-    h      ::  hour angle
+    ----------
+    M : integer
+        Month of Year (1-12)
+    D : integer
+        Day of month (1-31)
+    H : integer
+        Hour of day in UTC
+    lon : float
+        Longitude
+    lat : float
+        Latitude
 
     Returns
-    phi    :: solar_elevation in rad
+    ----------
+    phi : float
+        Solar elevation in radians
     """
 
     lon = deg_to_rad(lon)
@@ -72,12 +94,17 @@ def solar_elevation(M, D, H, lon, lat):
 
 def incoming_solar_radiation(phi, cloudcover):
     """
-    Inputs
-    phi         :: Solar elevation in rad
-    cloudcover  ::  Total cloudcover in percentage (0-1)
+    Parameters
+    ----------
+    phi : float
+        Solar elevation in radians
+    cloudcover : float
+        Total cloudcover in percentage (0-1)
 
     Returns
-    K  ::  Incoming solar radiation in W/m^2
+    ----------
+    K : float
+        Incoming solar radiation in W/m^2
     """
 
     # Using constants from De Bilt measurements
@@ -105,18 +132,31 @@ def incoming_solar_radiation(phi, cloudcover):
 
 
 def net_radiation(K, cloudcover, T, albedo=0.23):
-    """
-    Inputs
-    K          :: Incoming solar radiation
-    cloudcover :: In percent (0-1)
-    T          :: Temperature (Kelvin)
+    """Computes the net radiation based on incoming solar radiation, cloud cover
+    and the temperature.
 
-    Parameters:
-    L_plus    :: Incoming longwave
-    L_minus   :: Outgoing longwave
+    Parameters
+    ----------
+    K : float
+        Incoming solar radiation in W/m^2
+    cloudcover : float
+        In percent (0-1)
+    T : float
+        Temperature in Kelvin
+    albedo : float (optional)
+        Albedo of the surface
+
+    Other Parameters
+    ----------------
+    L_plus : float (internal)
+        Incoming longwave
+    L_minus : float (internal)
+        Outgoing longwave
 
     Returns
-    Q  ::  Net radiation in W/m^2
+    -------
+    Q : float
+        Net radiation in W/m^2
     """
 
     if cloudcover > 1:
@@ -139,14 +179,23 @@ def net_radiation(K, cloudcover, T, albedo=0.23):
 
 def surface_energy_budget(Q, T):
     """
-    Inputs
-    Q  :: Net Radiation
-    T  :: Temperature in Kelvin
+    Computes the Sensible, Latent and Soil heat flux
+
+    Parameters
+    ----------
+    Q  : float
+        Net Radiation
+    T  : float
+        Temperature in Kelvin
 
     Returns
-    H  ::  Sensible Heat Flux
-    E  ::  Latent Heat Flux
-    G  ::  Soil Heat Flux
+    -------
+    H : float
+        Sensible Heat Flux
+    E : float
+        Latent Heat Flux
+    G : float
+        Soil Heat Flux
     """
     cg = 0.1
     G = cg * Q
@@ -166,9 +215,17 @@ def surface_energy_budget(Q, T):
 
 
 def gamma_s_table(T):
-    """
-    Table 5 from Holtslag and Van Ulden 1983
-    Input: T in Celcius
+    """Table 5 from Holtslag and Van Ulden (1983)
+
+    Parameters
+    ----------
+    T : float
+        Temperature in Celcius
+
+    Returns
+    -------
+    gamma_s: float
+        Temperature dependent variable
     """
     base = 5
     Tb = base * round(T / base)
@@ -201,18 +258,29 @@ def gamma_s_table(T):
 
 def momemtum_flux_and_obukhov_length(U, z, z0, T, H):
     """
-    Inputs
-    U  :: Wind Speed at height z
-    z  :: Height of measured wind speed
-    z0 :: Roughness length
-    T  :: Temperature in Kelvin
-    H  :: Sensible heat flux
+    Parameters
+    ----------
+    U : float
+        Wind speed at height z
+    z : float
+        Height above surface of measured wind speed
+    z0 : float
+        Roughness length
+    T : float
+        Temperature in Kelvin
+    H : float
+        Sensible heat flux in W/m^2
 
     Returns
-    u_star  ::  Friction velocity (momentum flux)
-    L       ::  Obukhov length (stability parameter)
+    -------
+    u_star : float
+        Friction velocity (Momentum flux)
+    L : float
+        Obukhov Length (Stability parameter)
 
-    Note: u_star and L is solved in an iterative process
+    Notes
+    -----
+    u_star and L is solved in an iterative process
     """
 
     k = 0.4
@@ -253,21 +321,34 @@ def momemtum_flux_and_obukhov_length(U, z, z0, T, H):
 
 
 def vanulden_stability(dl, lat, lon, cloudcover, temperature, wspd, z, z0):
-    """
-    Function to collect and return and the Van Ulden
-    and Holtslag functions
-    Inputs
-    dl             :: datetime object of current time
-    lat            :: latitude in degress
-    lon            :: longitude in degress
-    cloudcover     :: percentage 0-1
-    temperature    :: Temperature in Kelvin
-    wspd           :: wind speed reference observation
-    z              :: Elevation of wind measurement (10 m)
-    z0             :: Roughness length
+    """ Main function to collect and return and the Van Ulden
+    and Holtslag functions to compute momentum flux and Obukhov length.
+
+    Parameters
+    ----------
+    dl : datetime.datetime object
+        Time in utc (e.g. datetime.datetime.utcnow())
+    lat : float
+        Latitude in degress
+    lon : float
+        Longitude in degrees
+    cloudcover: float
+        Cloudcover in percentage (0-1)
+    temperature : float
+        Temperature in Kelvin
+    wspd : float
+        Wind speed reference Observation in m/s
+    z : float
+        Elevation of wind measurement in m
+    z0 : float
+        Roughness length
+
     Returns
-    u_star         :: Friction velocity
-    L              :: Obukhov Length
+    -------
+    u_star : float
+        Friction velocity
+    L : float
+        Obukhov length
     """
 
     M = int(dl.strftime('%-m'))

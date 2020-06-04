@@ -4,14 +4,10 @@ dmit package
 Submodules
 ----------
 
-dmit.vanulden module
---------------------
+.. toctree::
 
-.. automodule:: dmit.vanulden
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
+   dmit.geotools
+   dmit.vanulden
 
 Module contents
 ---------------
