@@ -6,7 +6,9 @@ Submodules
 
 .. toctree::
 
+   dmit.datetools
    dmit.geotools
+   dmit.regrot
    dmit.vanulden
 
 Module contents
