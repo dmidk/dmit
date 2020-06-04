@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-Module for the Van Ulden and Holtslag 1983 paper:
+"""Module for the Van Ulden and Holtslag 1983 paper:
 A. A. M. Holtslag and A. P. Van Ulden, "A Simple Scheme for Daytime
 Estimates of the Surface Fluxes from Routine Weather Data", Journal of climate
 and applied meteorology, 1983, Vol. 22, No. 4.
+
 """
 import numpy as np
 import datetime as dt
@@ -15,12 +15,22 @@ __version__ = "0.1"
 __email__ = "kah@dmi.dk"
 
 
+
 def rad_to_deg(rad):
+    """
+    Convert radians to degrees
+    :param rad: radians
+    :type rad: float, list
+    :return: degrees
+    :rtype: float or numpy array
+    """
     deg = rad * 180. / np.pi
     return deg
 
 
 def deg_to_rad(deg):
+    """Constructor method
+    """
     rad = deg * np.pi / 180.
     return rad
 
