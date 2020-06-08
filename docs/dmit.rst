@@ -1,6 +1,14 @@
 dmit package
 ============
 
+Subpackages
+-----------
+
+.. toctree::
+
+   dmit.calc
+   dmit.stats
+
 Submodules
 ----------
 
@@ -9,7 +17,6 @@ Submodules
    dmit.datetools
    dmit.geotools
    dmit.regrot
-   dmit.vanulden
 
 Module contents
 ---------------

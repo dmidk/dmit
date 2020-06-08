@@ -97,6 +97,7 @@ def distance(lon1, lat1, lon2, lat2):
         Latitude of second point in degrees
 
     Returns
+    -------
     d : float
         Great-circle distance in kilometers
     """
@@ -166,6 +167,7 @@ def lon_lat_to_cartesian(lon, lat, R=1):
         Radius of sphere, defaults to 1.
 
     Returns
+    -------
     x : float
         x-coordinate
     y : float

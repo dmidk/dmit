@@ -13,10 +13,10 @@ dmit
 =====
 *dmit* is a small package which collects mainly meteorological tools to avoid replicating code.
 
-*fur* has been developed by the NWP group at the Danish Meteorological Institute (DMI).
-
 How to use?
 -------------------------------
-```
-import dmit
-```
+Just install and import where needed.
+
+.. code-block:: python
+
+   import dmit
