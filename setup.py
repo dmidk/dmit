@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-     name='dmit',  
-     version='0.1',
+     name='dmit',
+     version='0.2',
      author="Kasper Hintz",
      author_email="kah@dmi.dk",
      description="A Met Tool package",
