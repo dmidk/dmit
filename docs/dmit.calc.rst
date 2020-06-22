@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    dmit.calc.pressure
    dmit.calc.vanulden
