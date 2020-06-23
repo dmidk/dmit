@@ -2,11 +2,12 @@
 Module for OS relevant functions
 """
 import os
+import time
 import glob
 
 def find_files(directory, prefix="", postfix="", recursive=True, onlyfiles=True,
-          fullpath=False):
-    """Clean a directory based on files in directory
+          fullpath=False, olderthan=None):
+    """Find files in a directory.
 
     Parameters
     ----------
@@ -22,6 +23,8 @@ def find_files(directory, prefix="", postfix="", recursive=True, onlyfiles=True,
         Show only files. Defaults to True
     fullpath : Boolean (optional)
         Give full path. Defaults to False. If recursive=True, fullpath is given automatically.
+    olderthan : int (optional)
+        Match only files older than X seconds from now. Defaults to None
 
     Returns
     -------
@@ -30,11 +33,11 @@ def find_files(directory, prefix="", postfix="", recursive=True, onlyfiles=True,
 
     Notes
     -----
-    files = find_files('/some/path/', prefix="", postfix=".nc", recursive=False,
-               onlyfiles=True, fullpath=False)
+    files = find_files('/foo/', prefix="", postfix="", recursive=False,
+               onlyfiles=True, fullpath=True, olderthan=86400*100)
     """
 
-    if recursive:    
+    if recursive:
         fullpath = False
         files = []
         # r=root, d=directories, f = files
@@ -57,4 +60,33 @@ def find_files(directory, prefix="", postfix="", recursive=True, onlyfiles=True,
     if fullpath:
         files = [directory+f for f in files]
 
+    if olderthan is not None:
+        now = time.time()
+        tfiles = []
+        for f in files:
+            if not fullpath:
+                if os.path.getmtime(os.path.join(directory, f)) < (now - olderthan):
+                    tfiles.append(f)
+            else:
+                if os.path.getmtime(f) < (now - olderthan):
+                    tfiles.append(f)
+        files = tfiles
+
     return files
+
+
+def clean(files):
+    """Removes files from the system.
+    Note that filenames must be given as full paths
+
+    Parameters
+    ----------
+    files : list
+        List of files to remove.
+    """
+    for f in files:
+        try:
+            os.remove(f)
+        except OSError:
+            pass
+    return
