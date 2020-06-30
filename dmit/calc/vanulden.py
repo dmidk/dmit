@@ -8,6 +8,7 @@ and applied meteorology, 1983, Vol. 22, No. 4.
 This code was used in Hintz, et. al. (2020).
 
 """
+import sys
 import numpy as np
 import datetime as dt
 
@@ -283,7 +284,9 @@ def momemtum_flux_and_obukhov_length(U, z, z0, T, H):
     u_star and L is solved in an iterative process
     """
 
-    k = 0.4
+    eps = sys.float_info.epsilon
+
+    k = 0.41
     g = 9.81
     rho = 1.225  # kg m**-3 (at 15 degrees)
     cp = 1004  # J * kg**-1 * K**-1
@@ -293,29 +296,42 @@ def momemtum_flux_and_obukhov_length(U, z, z0, T, H):
     do_proceed = True
     iter = 0
     L = L_init
+
     while do_proceed:
         iter += 1
 
         L_old = L
 
-        x = (1 - 16 * z / L)**(1 / 4)
-        x0 = (1 - 16 * z0 / L)**(1 / 4)
+        if L<0:
+            x = (1 - 16 * z / L)**(1 / 4)
+            x0 = (1 - 16 * z0 / L)**(1 / 4)
 
-        phi_m_z = 2 * np.log((1 + x) / 2) + \
-            np.log((1 + x**2) / 2) - 2 * np.arctan(x) + np.pi / 2
-        phi_m_z0 = 2 * np.log((1 + x0) / 2) + \
-            np.log((1 + x0**2) / 2) - 2 * np.arctan(x0) + np.pi / 2
+            phi_m_z = 2 * np.log((1 + x) / 2) + \
+                np.log((1 + x**2) / 2) - 2 * np.arctan(x) + np.pi / 2
+
+            phi_m_z0 = 2 * np.log((1 + x0) / 2) + \
+                np.log((1 + x0**2) / 2) - 2 * np.arctan(x0) + np.pi / 2
+
+        elif L>=0:
+            phi_m_z = - 5 * z / L
+            phi_m_z0 = - 5 * z0 / L
+
+        if iter == 1:
+            phi_m_z = phi_m_z0 = 0
 
         u_star = k * U * (np.log(z / z0) - phi_m_z + phi_m_z0)**(-1)
 
         L = - (rho * cp * T * u_star**3) / (k * g * H)
 
-        if abs(1 - L_old / L) < 0.001:
+        if abs(L) < eps:
+            do_proceed = False
+        elif L == 0:
+            do_proceed = False
+        elif abs(1 - L_old / L) < 0.05:
             do_proceed = False
 
         if not L == L:
             do_proceed = False
-            # print('OBUKHOV Length = NAN')
 
     return u_star, L
 
@@ -369,17 +385,26 @@ def vanulden_stability(dl, lat, lon, cloudcover, temperature, wspd, z, z0):
 
 if __name__ == '__main__':
 
-    dl = dt.datetime(2016, 2, 14, 12)
+    # dl = dt.datetime(2016, 2, 14, 12)
+    #
+    # lon = 10
+    # lat = 55
+    #
+    # cloudcover = 2 / 8  # Octas
+    # temperature = 283.15  # K
+    # U = 8  # m/s
+    # z = 10  # m
+    # z0 = 0.1  # m
 
-    lon = 10
-    lat = 55
+    #
+    dl =  dt.datetime(2020,5,25,0,20,0)
+    lat = 55.73567
+    lon = 11.603826
+    cloudcover = 0.0011596679687500002  #%
+    temperature = 274.026145   # Kelvin
+    U = 5.545511345413614  # m/s
+    z = 10  #m
+    z0 = 0.08139686637750906
 
-    cloudcover = 2 / 8  # Octas
-    temperature = 283.15  # K
-    U = 8  # m/s
-    z = 10  # m
-    z0 = 0.1  # m
-
-    u_star, L = dmimet.vanulden_stability(
+    u_star, L = vanulden_stability(
         dl, lat, lon, cloudcover, temperature, U, z, z0)
-    print(u_star, L)
