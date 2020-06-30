@@ -5,7 +5,6 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
 
    dmit.calc
    dmit.stats
@@ -14,7 +13,6 @@ Submodules
 ----------
 
 .. toctree::
-   :maxdepth: 4
 
    dmit.datetools
    dmit.geotools

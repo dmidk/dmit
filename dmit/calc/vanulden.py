@@ -322,6 +322,7 @@ def momemtum_flux_and_obukhov_length(U, z, z0, T, H):
         u_star = k * U * (np.log(z / z0) - phi_m_z + phi_m_z0)**(-1)
 
         L = - (rho * cp * T * u_star**3) / (k * g * H)
+        print(L, flush=True)
 
         if abs(L) < eps:
             do_proceed = False
@@ -402,7 +403,7 @@ if __name__ == '__main__':
     lon = 11.603826
     cloudcover = 0.0011596679687500002  #%
     temperature = 274.026145   # Kelvin
-    U = 5.545511345413614  # m/s
+    U = 10  # m/s
     z = 10  #m
     z0 = 0.08139686637750906
 
