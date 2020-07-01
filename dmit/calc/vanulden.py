@@ -322,7 +322,6 @@ def momemtum_flux_and_obukhov_length(U, z, z0, T, H):
         u_star = k * U * (np.log(z / z0) - phi_m_z + phi_m_z0)**(-1)
 
         L = - (rho * cp * T * u_star**3) / (k * g * H)
-        print(L, flush=True)
 
         if abs(L) < eps:
             do_proceed = False

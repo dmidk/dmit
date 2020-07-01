@@ -11,7 +11,7 @@ import datetime as dt
 import warnings
 
 
-def calcSunTime(longitude, latitude, dl=dt.datetime.utcnow(), setrise='sunset', zenith=90.8):
+def calc_sun_time(longitude, latitude, dl=dt.datetime.utcnow(), setrise='sunset', zenith=90.8):
     """Estimate sunset or sunrise in UTC time
 
     Parameters
