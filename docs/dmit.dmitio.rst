@@ -1,5 +1,5 @@
-dmit.calc package
-=================
+dmit.dmitio package
+===================
 
 Submodules
 ----------
@@ -7,14 +7,12 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   dmit.calc.pressure
-   dmit.calc.sun
-   dmit.calc.vanulden
+   dmit.dmitio.s3
 
 Module contents
 ---------------
 
-.. automodule:: dmit.calc
+.. automodule:: dmit.dmitio
    :members:
    :undoc-members:
    :show-inheritance:

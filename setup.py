@@ -5,13 +5,14 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
      name='dmit',
-     version='0.3.4',
+     version='0.3.6',
      author="Kasper Hintz",
      author_email="kah@dmi.dk",
      description="A Met Tool package",
      long_description=long_description,
      long_description_content_type="text/markdown",
      packages=setuptools.find_packages(),
+     setup_requires=['wheel'],
      classifiers=[
          "Programming Language :: Python :: 3",
          "License :: OSI Approved :: MIT License",

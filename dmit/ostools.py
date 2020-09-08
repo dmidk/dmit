@@ -4,6 +4,7 @@ Module for OS relevant functions
 import os
 import time
 import glob
+import json
 
 def find_files(directory, prefix="", postfix="", recursive=True, onlyfiles=True,
           fullpath=False, olderthan=None):
@@ -33,8 +34,7 @@ def find_files(directory, prefix="", postfix="", recursive=True, onlyfiles=True,
 
     Notes
     -----
-    files = find_files('/foo/', prefix="", postfix="", recursive=False,
-               onlyfiles=True, fullpath=True, olderthan=86400*100)
+    files = find_files('/foo/', prefix="", postfix="", recursive=False, onlyfiles=True, fullpath=True, olderthan=86400*100)
     """
 
     if recursive:

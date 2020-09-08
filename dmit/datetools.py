@@ -72,8 +72,8 @@ def current_run_datetime(frequency=3, delay=2):
     """
     now = datetime.utcnow()
     nowrounded = now.replace(hour=((now.hour - delay) - (now.hour - delay) % frequency) % 24)
-    if (now - dt.timedelta(hours=frequency)).strftime('%d') != nowrounded.strftime('%d'):
-        nowrounded = nowrounded - dt.timedelta(hours=24)
+    if (now - timedelta(hours=frequency)).strftime('%d') != nowrounded.strftime('%d'):
+        nowrounded = nowrounded - timedelta(hours=24)
     return nowrounded
 
 
