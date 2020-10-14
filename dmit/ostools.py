@@ -90,3 +90,39 @@ def clean(files):
         except OSError:
             pass
     return
+
+
+def does_file_exist(f):
+    """
+    Check if file exist
+
+    Parameters
+    ----------
+    f : str
+        name of file to check
+
+    Returns
+    -------
+    state : boolean
+        Whether the file exist (True) or not exist (False)
+    """
+    state = os.path.isfile(f)
+    return state
+
+
+def does_dir_exist(f):
+    """
+    Check if directory exist
+
+    Parameters
+    ----------
+    f : str
+        name of directory to check
+
+    Returns
+    -------
+    state : boolean
+        Whether the directory exist (True) or not exist (False)
+    """
+    state = os.path.exists(f)
+    return state
