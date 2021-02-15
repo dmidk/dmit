@@ -1,8 +1,8 @@
 numpy
 scipy
 boto
+pygrib
 eccodes
 netCDF4
 docopt
 xarray
-pygrib
