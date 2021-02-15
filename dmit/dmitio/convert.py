@@ -10,20 +10,28 @@ Currently handled formats are:
 
 It is important to set the ECCODES_DEFINITION_PATH correctly before running this.
 Especially if you are using some local definitions. For example:
-export ECCODES_DEFINITION_PATH=/home/$USER/local_grib_definitions/definitions/:/home/$USER/miniconda3/envs/$ENV/share/eccodes/definitions/
+
+.. code-block:: sh
+
+    export ECCODES_DEFINITION_PATH=/home/$USER/local_grib_definitions/definitions/:/home/$USER/miniconda3/envs/$ENV/share/eccodes/definitions/
+
+This module is made to be run directly from command-line. For example:
+
+.. code-block:: sh
+
+    python -m dmit.dmitio.convert grib_to_nc --indir /home/$USER/gribfiles_dir/ -o test.nc
 """
 import os
 import sys
-sys.path.append("../")
 import traceback
 import docopt
 import netCDF4 as nc
 import xarray as xr
 
-import dmitio
-import ostools
-import grib
-import netcdf
+from dmit import dmitio
+from dmit import ostools
+from dmit.dmitio import grib
+from dmit.dmitio import netcdf
 
 version = '0.0.1'
 

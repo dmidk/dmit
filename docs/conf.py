@@ -13,17 +13,17 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../'))
-
+sys.path.append(os.path.abspath('../dmit/dmitio/'))
 import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
 project = 'dmit'
-copyright = '2020, K. Hintz'
+copyright = '2021, K. Hintz'
 author = 'K. Hintz'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
+release = '0.4.1'
 master_doc = 'index'
 
 # -- General configuration ---------------------------------------------------

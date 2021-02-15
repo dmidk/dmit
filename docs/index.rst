@@ -2,7 +2,7 @@ dmit documentation
 ===============================
 
   .. toctree::
-     :maxdepth: 1
+     :maxdepth: 6
      :hidden:
 
      install
@@ -20,4 +20,10 @@ Just install and import where needed.
 .. code-block:: python
 
    import dmit
+
+Or use on command-line.
+
+.. code-block:: sh
+
+   python -m dmit.dmitio.convert -h
 
