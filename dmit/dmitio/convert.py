@@ -50,6 +50,7 @@ Options:
   -o, --output <str>            Specify output file [default: foo]      
   -h, --help                    Show this screen.
   -V, --version                 Show version
+  --print-namelist              Print the namelist to get an example
 
 """.format(filename=os.path.basename(__file__), version=version)
 
@@ -70,11 +71,17 @@ if __name__=="__main__":
     else:
         nml = args['--namelist']
 
+
     try:
         namelist = dmitio.read_json(nml)
     except FileNotFoundError:
         print('Namelist not found')
         sys.exit(1)
+
+
+    if args['--print-namelist']:
+        print(namelist)
+        sys.exit(0) 
 
     if args['grib_to_nc']:
 
@@ -92,4 +99,4 @@ if __name__=="__main__":
 
         ncwrite = netcdf.netcdf_write(namelist)
         ncwrite.write_data(data, outputfile)
-        
+        print('Done writing to outputfile')
