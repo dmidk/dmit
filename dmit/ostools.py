@@ -7,7 +7,7 @@ import glob
 import json
 
 def find_files(directory, prefix="", postfix="", recursive=True, onlyfiles=True,
-          fullpath=False, olderthan=None):
+          fullpath=False, olderthan=None, inorder=False):
     """Find files in a directory.
 
     Parameters
@@ -26,6 +26,8 @@ def find_files(directory, prefix="", postfix="", recursive=True, onlyfiles=True,
         Give full path. Defaults to False. If recursive=True, fullpath is given automatically.
     olderthan : int (optional)
         Match only files older than X seconds from now. Defaults to None
+    inorder : Boolean (optional)
+        Return sorted list of filenames. Defaults to False
 
     Returns
     -------
@@ -71,6 +73,9 @@ def find_files(directory, prefix="", postfix="", recursive=True, onlyfiles=True,
                 if os.path.getmtime(f) < (now - olderthan):
                     tfiles.append(f)
         files = tfiles
+
+    if inorder:
+        files = list(sorted(files))
 
     return files
 

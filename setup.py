@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
      name='dmit',
-     version='0.3.7',
+     version='0.4.0',
      author="Kasper Hintz",
      author_email="kah@dmi.dk",
      description="A Met Tool package",
