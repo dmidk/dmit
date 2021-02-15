@@ -2,28 +2,21 @@ name: dmit
 channels:
   - conda-forge
 dependencies:
-  - python==3.7
-  - pip==20.2
+  - python>=3.7
+  - pip>=20.2
   - numpy
   - matplotlib
   - scikit-learn
   - xarray
-  - eccodes>=2.20.0
+  - eccodes
   - cfgrib
   - pandas
   - pygrib
   - cartopy
-  - metpy
   - netCDF4
   - sphinx
   - pip:
-    - schedule
     - docopt
-    - pillow
     - boto
-    - scp
-    - paramiko
-    - python-dotenv
-    - dmit
-    - f90nml
     - eccodes
+    - dmit
