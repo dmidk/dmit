@@ -66,12 +66,16 @@ def find_files(directory, prefix="", postfix="", recursive=True, onlyfiles=True,
         now = time.time()
         tfiles = []
         for f in files:
-            if not fullpath:
-                if os.path.getmtime(os.path.join(directory, f)) < (now - olderthan):
-                    tfiles.append(f)
-            else:
-                if os.path.getmtime(f) < (now - olderthan):
-                    tfiles.append(f)
+            try:
+                if not fullpath:
+                    if os.path.getmtime(os.path.join(directory, f)) < (now - olderthan):
+                        tfiles.append(f)
+                else:
+                    if os.path.getmtime(f) < (now - olderthan):
+                        tfiles.append(f)
+            except FileNotFoundError:
+                continue
+            
         files = tfiles
 
     if inorder:
