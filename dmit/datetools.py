@@ -7,7 +7,7 @@ from calendar import monthrange
 from datetime import date, datetime, timedelta
 
 
-def round_time(dt=None, roundTo=timedelta(minutes=1), roundType='nearest'):
+def round_time(dt:datetime = None, roundTo:timeldeta = timedelta(minutes=1), roundType:str = 'nearest') -> datetime:
     """Round a time to a nearest common format
 
     Parameters
@@ -37,7 +37,7 @@ def round_time(dt=None, roundTo=timedelta(minutes=1), roundType='nearest'):
     return dt + timedelta(0, rounding - seconds, -dt.microsecond)
 
 
-def per_delta(start, end, delta):
+def per_delta(start:datetime, end:datetime, delta:timedelta):
     """Generate a list of datetimes within an interval
 
     Parameters
@@ -55,7 +55,7 @@ def per_delta(start, end, delta):
         curr += delta
 
 
-def current_run_datetime(frequency=3, delay=2):
+def current_run_datetime(frequency:int=3, delay:int=2) -> datetime:
     """Get the time of the current valid analysis
 
     Parameters
@@ -77,7 +77,7 @@ def current_run_datetime(frequency=3, delay=2):
     return nowrounded
 
 
-def month_delta(d1, d2):
+def month_delta(d1:datetime, d2:datetime) -> int:
     """Find the difference between dates in months
 
     Parameters
