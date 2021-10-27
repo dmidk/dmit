@@ -38,7 +38,7 @@ def find_files(directory, prefix="", postfix="", recursive=True, onlyfiles=True,
     -----
     files = find_files('/foo/', prefix="", postfix="", recursive=False, onlyfiles=True, fullpath=True, olderthan=86400*100)
     """
-
+    
     if recursive:
         fullpath = False
         files = []

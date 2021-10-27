@@ -5,9 +5,9 @@ Module for manipulating dates
 import datetime
 from calendar import monthrange
 from datetime import date, datetime, timedelta
+from typing import Union
 
-
-def round_time(dt:datetime = None, roundTo:timeldeta = timedelta(minutes=1), roundType:str = 'nearest') -> datetime:
+def round_time(dt:datetime = None, roundTo:timedelta = timedelta(minutes=1), roundType:str = 'nearest') -> datetime:
     """Round a time to a nearest common format
 
     Parameters
@@ -55,25 +55,74 @@ def per_delta(start:datetime, end:datetime, delta:timedelta):
         curr += delta
 
 
-def current_run_datetime(frequency:int=3, delay:int=2) -> datetime:
+# def current_run_datetime(frequency:int=3, delay:int=2) -> datetime:
+#     """Get the time of the current valid analysis
+
+#     Parameters
+#     ----------
+#     frequency : integer (optional)
+#         Frequency of analysis in hours. Defaults to 3 hours.
+#     delay : integer (optional)
+#         Delay in hours between now and when analysis becomes available. Defaults to 2 hours.
+
+#     Returns
+#     -------
+#     nowrounded : datetime.datetime object
+#         Time for the latest current valid analysis
+#     """
+#     now = datetime.utcnow()
+#     nowrounded = now.replace(hour=((now.hour - delay) - (now.hour - delay) % frequency) % 24)
+#     if (now - timedelta(hours=frequency)).strftime('%d') != nowrounded.strftime('%d'):
+#         nowrounded = nowrounded - timedelta(hours=24)
+#     return nowrounded
+
+def current_run_datetime(frequency:int=180, delay:int=120, roundto:str='hour', now:Union[datetime, None]=None) -> datetime:
     """Get the time of the current valid analysis
 
     Parameters
     ----------
     frequency : integer (optional)
-        Frequency of analysis in hours. Defaults to 3 hours.
+        Frequency of analysis in minutes. Defaults to 180 minutes (3 hours).
     delay : integer (optional)
-        Delay in hours between now and when analysis becomes available. Defaults to 2 hours.
+        Delay in minutes between now and when analysis becomes available. Defaults to 120 minutes (2 hours)
+    roundto : string (optional)
+        What to round to: Available is "hour", "minute". Defaults to "hour"
+    now : datetime object (optional)
+        Current time to get run for. Defaults to now.
 
     Returns
     -------
     nowrounded : datetime.datetime object
         Time for the latest current valid analysis
     """
-    now = datetime.utcnow()
-    nowrounded = now.replace(hour=((now.hour - delay) - (now.hour - delay) % frequency) % 24)
-    if (now - timedelta(hours=frequency)).strftime('%d') != nowrounded.strftime('%d'):
+
+    if now is None: now=datetime.utcnow()
+
+    if roundto=='hour':
+        delay = delay//60
+        frequency = frequency//60
+
+        delayed_now_hour = now.hour - delay
+
+        if delayed_now_hour<0: now += timedelta(days=delayed_now_hour//24)
+        nowrounded = now.replace(hour=((delayed_now_hour) - (delayed_now_hour) % frequency) % 24)
+
+    elif roundto=='minute' or roundto=='10minute':
+        if int(now.minute) < delay:
+            delay+=60 
+        nowrounded = now.replace(minute=((now.minute - delay) - (now.minute - delay) % frequency) % 60)
+        nowrounded = nowrounded.replace(hour=(nowrounded.hour - (nowrounded.minute)//50) % 24)
+
+    if (now - timedelta(minutes=frequency)).strftime('%d') != nowrounded.strftime('%d'):
         nowrounded = nowrounded - timedelta(hours=24)
+
+    if roundto=='hour':
+        nowrounded = round_time(nowrounded, roundTo=timedelta(hours=1), roundType='rounddown')
+    elif roundto=='minute':
+        nowrounded = round_time(nowrounded, roundTo=timedelta(minutes=1), roundType='rounddown')
+    elif roundto=='10minute':
+        nowrounded = round_time(nowrounded, roundTo=timedelta(minutes=10), roundType='rounddown')
+
     return nowrounded
 
 

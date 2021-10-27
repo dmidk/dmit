@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
      name='dmit',
-     version='0.4.3',
+     version='0.4.5',
      author="Kasper Hintz",
      author_email="kah@dmi.dk",
      description="A Met Tool package",
@@ -18,6 +18,13 @@ setuptools.setup(
          "License :: OSI Approved :: MIT License",
          "Operating System :: OS Independent",
      ],
+     install_requires=[
+         'wheel',
+         'xarray',
+         'numpy',
+         'eccodes',
+         'pygrib',
+         ],
      include_package_data=True,
      data_files=[('dmit', ['dmit/dmitio/convert.json'])],
  )
