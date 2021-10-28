@@ -113,8 +113,13 @@ def current_run_datetime(frequency:int=180, delay:int=120, roundto:str='hour', n
         nowrounded = now.replace(minute=((now.minute - delay) - (now.minute - delay) % frequency) % 60)
         nowrounded = nowrounded.replace(hour=(nowrounded.hour - (nowrounded.minute)//50) % 24)
 
+    if (now - timedelta(minutes=frequency)).hour != nowrounded.hour:
+        nowrounded-=timedelta(hours=1)
+
     if (now - timedelta(minutes=frequency)).strftime('%d') != nowrounded.strftime('%d'):
-        nowrounded = nowrounded - timedelta(hours=24)
+        nowrounded-=timedelta(hours=24)
+
+
 
     if roundto=='hour':
         nowrounded = round_time(nowrounded, roundTo=timedelta(hours=1), roundType='rounddown')
