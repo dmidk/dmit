@@ -5,7 +5,7 @@ import sys
 import os
 import json
 sys.path.insert(0, os.path.abspath('./dmitio/'))
-from .arguments import arguments
+#from .arguments import arguments
 
 def read_json(infile):
     """Reads data from a json file

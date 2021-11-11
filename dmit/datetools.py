@@ -54,28 +54,6 @@ def per_delta(start:datetime, end:datetime, delta:timedelta):
         yield curr
         curr += delta
 
-
-# def current_run_datetime(frequency:int=3, delay:int=2) -> datetime:
-#     """Get the time of the current valid analysis
-
-#     Parameters
-#     ----------
-#     frequency : integer (optional)
-#         Frequency of analysis in hours. Defaults to 3 hours.
-#     delay : integer (optional)
-#         Delay in hours between now and when analysis becomes available. Defaults to 2 hours.
-
-#     Returns
-#     -------
-#     nowrounded : datetime.datetime object
-#         Time for the latest current valid analysis
-#     """
-#     now = datetime.utcnow()
-#     nowrounded = now.replace(hour=((now.hour - delay) - (now.hour - delay) % frequency) % 24)
-#     if (now - timedelta(hours=frequency)).strftime('%d') != nowrounded.strftime('%d'):
-#         nowrounded = nowrounded - timedelta(hours=24)
-#     return nowrounded
-
 def current_run_datetime(frequency:int=180, delay:int=120, roundto:str='hour', now:Union[datetime, None]=None) -> datetime:
     """Get the time of the current valid analysis
 
@@ -98,11 +76,14 @@ def current_run_datetime(frequency:int=180, delay:int=120, roundto:str='hour', n
 
     if now is None: now=datetime.utcnow()
 
+    if frequency < 60 and roundto=='hour': roundto='minute'
+    if frequency >= 60 and roundto=='minute': roundto='hour'
+
     if roundto=='hour':
-        delay = delay//60
+        delay = delay/60
         frequency = frequency//60
 
-        delayed_now_hour = now.hour - delay
+        delayed_now_hour = int(now.hour - delay)
 
         if delayed_now_hour<0: now += timedelta(days=delayed_now_hour//24)
         nowrounded = now.replace(hour=((delayed_now_hour) - (delayed_now_hour) % frequency) % 24)
@@ -113,13 +94,11 @@ def current_run_datetime(frequency:int=180, delay:int=120, roundto:str='hour', n
         nowrounded = now.replace(minute=((now.minute - delay) - (now.minute - delay) % frequency) % 60)
         nowrounded = nowrounded.replace(hour=(nowrounded.hour - (nowrounded.minute)//50) % 24)
 
-    if (now - timedelta(minutes=frequency)).hour != nowrounded.hour:
-        nowrounded-=timedelta(hours=1)
+    # if (now - timedelta(minutes=frequency)).hour != nowrounded.hour:
+    #     nowrounded-=timedelta(hours=0)
 
     if (now - timedelta(minutes=frequency)).strftime('%d') != nowrounded.strftime('%d'):
         nowrounded-=timedelta(hours=24)
-
-
 
     if roundto=='hour':
         nowrounded = round_time(nowrounded, roundTo=timedelta(hours=1), roundType='rounddown')
@@ -222,3 +201,62 @@ def count_days(date1=None, date2=None, includeEnd=False):
         return int((date2-date1).total_seconds()/(60*60*24) + 1)
     else:
         return int((date2-date1).total_seconds()/(60*60*24))
+
+
+if __name__=="__main__":
+
+    ct = current_run_datetime(frequency=180, delay=120, now=datetime(2020,1,1,12))
+    ca = datetime(2020,1,1,9)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=180, delay=120, now=datetime(2020,1,1,13))
+    ca = datetime(2020,1,1,9)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=180, delay=120, now=datetime(2020,1,1,13,10))
+    ca = datetime(2020,1,1,9)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=180, delay=120, now=datetime(2020,1,1,13,59))
+    ca = datetime(2020,1,1,9)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=180, delay=120, now=datetime(2020,1,1,14,0))
+    ca = datetime(2020,1,1,12)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=180, delay=10, now=datetime(2020,1,1,12,5))
+    ca = datetime(2020,1,1,9)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=60, delay=10, now=datetime(2020,1,1,12,5))
+    ca = datetime(2020,1,1,11,0)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=10, delay=10, now=datetime(2020,1,1,12,5))
+    ca = datetime(2020,1,1,11,50)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=10, delay=10, now=datetime(2020,1,1,12,55), roundto='minute')
+    ca = datetime(2020,1,1,12,40)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=10, delay=10, now=datetime(2020,1,2,0,5), roundto='minute')
+    ca = datetime(2020,1,1,23,50)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=10, delay=10, now=datetime(2021,1,1,0,5), roundto='minute')
+    ca = datetime(2020,12,31,23,50)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+    
+    ct = current_run_datetime(frequency=10, delay=20, now=datetime(2020,1,1,12,40), roundto='minute')
+    ca = datetime(2020,1,1,12,20)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=30, delay=5, now=datetime(2020,1,1,12,40), roundto='minute')
+    ca = datetime(2020,1,1,12,30)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))
+
+    ct = current_run_datetime(frequency=60, delay=60, now=datetime(2020,1,1,12,40), roundto='minute')
+    ca = datetime(2020,1,1,11,0)
+    print(("Success: {} == {}").format(ct, ca)) if ct==ca else print(("Error: {} != {}").format(ct, ca))

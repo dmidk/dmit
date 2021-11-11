@@ -7,7 +7,6 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   dmit.dmitio.arguments
    dmit.dmitio.convert
    dmit.dmitio.grib
    dmit.dmitio.netcdf
