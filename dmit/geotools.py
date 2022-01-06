@@ -154,7 +154,7 @@ def bearing(lon1, lat1, lon2, lat2):
     return bearing
 
 
-def lon_lat_to_cartesian(lon, lat, R=1):
+def lon_lat_to_cartesian(lon, lat, R=1) -> tuple:
     """Calculates cartesian coordinates of a point on a sphere with radius R
 
     Parameters

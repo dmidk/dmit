@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
      name='dmit',
-     version='0.4.7',
+     version='0.5.0',
      author="Kasper Hintz",
      author_email="kah@dmi.dk",
      description="A Met Tool package",
@@ -25,6 +25,4 @@ setuptools.setup(
          'eccodes',
          'pygrib',
          ],
-     include_package_data=True,
-     data_files=[('dmit', ['dmit/dmitio/convert.json'])],
  )
