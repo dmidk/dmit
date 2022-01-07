@@ -20,9 +20,8 @@ setuptools.setup(
      ],
      install_requires=[
          'wheel',
-         'xarray',
+         'scipy',
          'numpy',
-         'eccodes',
-         'pygrib',
+         'boto3',
          ],
  )

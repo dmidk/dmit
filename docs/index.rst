@@ -11,7 +11,15 @@ dmit documentation
 =====
 dmit
 =====
-*dmit* is a small package which collects mainly meteorological tools to avoid replicating code.
+*dmit* is a python package which collects mainly meteorological tools to avoid replicating code.
+
+How to install?
+-------------------------------
+*dmit*
+
+.. code-block:: sh
+
+   pip install dmit
 
 How to use?
 -------------------------------
@@ -20,10 +28,4 @@ Just install and import where needed.
 .. code-block:: python
 
    import dmit
-
-Or use on command-line.
-
-.. code-block:: sh
-
-   python -m dmit.dmitio.convert -h
 

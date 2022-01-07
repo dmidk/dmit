@@ -18,5 +18,6 @@ dependencies:
   - pip:
     - docopt
     - boto
+    - boto3
     - eccodes
-    - dmit
+    - sphinx_rtd_theme
