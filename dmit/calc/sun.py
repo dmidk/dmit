@@ -114,6 +114,9 @@ def calc_sun_time(longitude, latitude, dl=dt.datetime.utcnow(), setrise='sunset'
     UT = UT % 24
     hr = int(UT) % 24
     min = int(round((UT - int(UT))*60,0))
+    if min == 60:
+        hr+=1
+        min=0
 
     sun_dl = dt.datetime(year, month, day, hr, min)
 
